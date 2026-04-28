@@ -6,11 +6,13 @@ import Dashboard from './components/Dashboard'
 import SubscriptionForm from './components/SubscriptionForm'
 import SubscriptionList from './components/SubscriptionList'
 import Auth from './components/Auth'
+import HelpModal from './components/HelpModal'
 
 function App() {
   const [session, setSession] = useState(null)
   const [subscriptions, setSubscriptions] = useState([])
   const [loading, setLoading] = useState(true)
+  const [isHelpOpen, setIsHelpOpen] = useState(false)
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -162,6 +164,9 @@ function App() {
       <header className="app-header">
         <h1>Subscription Tracker Pro</h1>
         <div className="user-controls">
+          <button className="help-btn" onClick={() => setIsHelpOpen(true)} title="Ayuda y FAQs">
+            ?
+          </button>
           <span className="user-email">{session.user.email}</span>
           <button onClick={handleLogout} className="logout-btn">Salir</button>
         </div>
@@ -185,6 +190,8 @@ function App() {
           />
         </>
       )}
+
+      <HelpModal isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} />
     </div>
   )
 }
