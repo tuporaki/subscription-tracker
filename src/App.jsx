@@ -13,15 +13,24 @@ function App() {
   const [subscriptions, setSubscriptions] = useState([])
   const [loading, setLoading] = useState(true)
   const [isHelpOpen, setIsHelpOpen] = useState(false)
+  const [isRecovery, setIsRecovery] = useState(false)
 
   useEffect(() => {
+    // Check initial hash for recovery
+    if (window.location.hash.includes('type=recovery')) {
+      setIsRecovery(true)
+    }
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session)
     })
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'PASSWORD_RECOVERY') {
+        setIsRecovery(true)
+      }
       setSession(session)
     })
 
@@ -134,6 +143,10 @@ function App() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut()
+  }
+
+  if (isRecovery) {
+    return <Auth onAuthSuccess={() => setIsRecovery(false)} />
   }
 
   if (!session) {
