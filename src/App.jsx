@@ -40,6 +40,7 @@ function App() {
       const { data, error } = await supabase
         .from('subscriptions')
         .select('*')
+        .eq('user_id', session.user.id)
         .order('created_at', { ascending: true })
       
       if (error) throw error
