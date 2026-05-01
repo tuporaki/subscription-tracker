@@ -76,6 +76,24 @@ const Auth = ({ onAuthSuccess }) => {
     setLoading(false);
   };
 
+  const handleResetPassword = async () => {
+    if (!email) {
+      setErrorMsg('Ingresa tu correo en el campo de arriba para recuperar tu contraseña.');
+      return;
+    }
+    setLoading(true);
+    setErrorMsg('');
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin + window.location.pathname,
+    });
+    if (error) {
+      setErrorMsg(error.message);
+    } else {
+      setErrorMsg('Te hemos enviado un correo con un enlace para restablecer tu contraseña. Revísalo y haz clic en el enlace.');
+    }
+    setLoading(false);
+  };
+
   if (isRecovery) {
     return (
       <div className="auth-container">
@@ -141,6 +159,19 @@ const Auth = ({ onAuthSuccess }) => {
             {loading ? 'Procesando...' : (isLogin ? 'Entrar' : 'Registrarse')}
           </button>
         </form>
+
+        {isLogin && (
+          <div className="auth-forgot-password">
+            <button 
+              type="button" 
+              className="forgot-password-btn"
+              onClick={handleResetPassword}
+              disabled={loading}
+            >
+              ¿Olvidaste tu contraseña?
+            </button>
+          </div>
+        )}
 
         <div className="auth-toggle">
           <span>{isLogin ? '¿No tienes cuenta?' : '¿Ya tienes cuenta?'}</span>

@@ -122,3 +122,23 @@
 .toggle-mode-btn:hover {
   text-decoration: underline;
 }
+
+.auth-forgot-password {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.forgot-password-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+
+.forgot-password-btn:hover {
+  color: var(--primary-color);
+}
